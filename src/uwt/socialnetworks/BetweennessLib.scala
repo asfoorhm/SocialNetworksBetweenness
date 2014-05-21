@@ -9,7 +9,7 @@ import akka.dispatch.Foreach
 object BetweennessLib {
 	def vertexProgramOfPass1(vid: VertexId, vertex: VertexData, message: Message): VertexData =
 		{
-			println("vid=" + vid + " node=" + vertex + "; received msg: " + message)
+			BetweennessApp.printToOutput("vid=" + vid + " node=" + vertex + "; received msg: " + message)
 			var vdata = new VertexData()
 			vdata.levels = vertex.levels
 			vdata.shortestPaths = vertex.shortestPaths
@@ -71,8 +71,8 @@ object BetweennessLib {
 						var backwardMsg = new Message(i, dstId, srcId)
 						backwardMsg.isBackwardMessage = true
 						
-						println("sending msg from src=" + srcId + " (lvl=" + srcLevel + " to dstId=" + dstId + " (lvl=" + dstLevel + "; msg=" + msg)
-						println("sending back msg from src=" + dstId + " to dstId=" + srcId + " ; msg=" + msg)
+						BetweennessApp.printToOutput("sending msg from src=" + srcId + " (lvl=" + srcLevel + " to dstId=" + dstId + " (lvl=" + dstLevel + "; msg=" + msg)
+						BetweennessApp.printToOutput("sending back msg from src=" + dstId + " to dstId=" + srcId + " ; msg=" + msg)
 						resultList ::= (dstId, msg)
 						resultList ::= (srcId, backwardMsg)
 					}
@@ -91,7 +91,7 @@ object BetweennessLib {
 	
 	def vertexProgramOfPass2(vid: VertexId, vertex: VertexData, message: Message): VertexData =
 		{
-			println("vid=" + vid + " node=" + vertex + "; received msg: " + message)
+			BetweennessApp.printToOutput("vid=" + vid + " node=" + vertex + "; received msg: " + message)
 			var vdata = new VertexData()
 			vdata.levels = vertex.levels
 			vdata.shortestPaths = vertex.shortestPaths
@@ -159,8 +159,8 @@ object BetweennessLib {
 						var backwardMsg = new Message(i, dstId, srcId)
 						backwardMsg.isBackwardMessage = true
 						
-						println("pass2-sending msg from src=" + srcId + " to dstId=" + dstId + "; msg=" + msg)
-						println("pass2-sending back msg from src=" + dstId + " to dstId=" + srcId + " ; msg=" + msg)
+						BetweennessApp.printToOutput("pass2-sending msg from src=" + srcId + " to dstId=" + dstId + "; msg=" + msg)
+						BetweennessApp.printToOutput("pass2-sending back msg from src=" + dstId + " to dstId=" + srcId + " ; msg=" + msg)
 						resultList ::= (dstId, msg)
 						resultList ::= (srcId, backwardMsg)
 					}
@@ -173,10 +173,12 @@ object BetweennessLib {
 	
 	def getGraphFromFile(fileName:String, sc:SparkContext): Graph[Int,Double] = 
 	{
-		var g = GraphLoader.edgeListFile(sc, "/home/spark/apps/graphx/edges.txt", true, 7)
+		var g = GraphLoader.edgeListFile(sc, fileName, true, 7)
 		var edges = g.edges.mapValues(v=>0.0)
 		var vertices = g.vertices.mapValues(v=>v.toInt)
 		var grf = Graph(vertices,edges)
 		return grf
 	}
+	
+	
 }
