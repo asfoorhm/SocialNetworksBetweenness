@@ -12,5 +12,6 @@ class VertexData extends Serializable{
 	var isCreditPropegated:scala.collection.mutable.Map[VertexId,Boolean] =  scala.collection.mutable.Map[VertexId,Boolean]()
 	var numOfMessagesSent:scala.collection.mutable.Map[VertexId,Int] =  scala.collection.mutable.Map[VertexId,Int]()
 	override def toString() = "(paths="+shortestPaths+", levels="+levels+", credits="+credits+", isLeaf="+isLeaf+", numOfMessagesSent="+numOfMessagesSent+")"
+	//override def toString() = "(credits="+credits+",  numOfMessagesSent="+numOfMessagesSent+",  isCreditPropegated="+isCreditPropegated+")"
 
 }
